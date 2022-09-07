@@ -4,7 +4,10 @@ declare(strict_types = 1);
 
 namespace Tests\Log;
 
+use App\Log\ConsoleLogger;
+use App\Log\FileLogger;
 use App\Log\Log;
+use App\Log\LogStrategy;
 use PHPUnit\Framework\TestCase;
 
 class LogTest extends TestCase
@@ -14,8 +17,8 @@ class LogTest extends TestCase
 
     public function setUp(): void
     {
-        $this->consoleLog = new Log('console');
-        $this->fileLog = new Log('file');
+        $this->consoleLog = new Log(new LogStrategy(new ConsoleLogger()));
+        $this->fileLog = new Log(new LogStrategy(new FileLogger('logs.txt')));
     }
 
     public function tearDown(): void
@@ -25,15 +28,6 @@ class LogTest extends TestCase
         if (file_exists($filename)) {
             unlink($filename);
         }
-    }
-
-    /** @test */
-    public function logShouldThrowExceptionWhenTypeIsInvalid(): void
-    {
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Invalid type!');
-
-        new Log('foo');
     }
 
     /** @test */
