@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  php:
+    build: ./.docker/php
+    entrypoint: ./docker-entrypoint.sh
+    tty: true
+    ports:
+      - "9000:9000"
+    volumes:
+      - "./:/var/www"
+    networks:
+      - app_network
+
+networks:
+  app_network:
+    driver: bridge
